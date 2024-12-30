@@ -1,1 +1,5 @@
 # WeActStudio.RP2350ACoreBoard
+
+RP2350A_v10
+
+RP2350A_v20
