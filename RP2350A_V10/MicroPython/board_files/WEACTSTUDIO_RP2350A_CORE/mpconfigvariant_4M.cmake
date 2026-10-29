@@ -1,0 +1,10 @@
+# 4MB Flash variant: make BOARD=WEACTSTUDIO_RP2350A_CORE BOARD_VARIANT=4M
+# 4MB Flash 变体
+set(PICO_PLATFORM "rp2350")
+set(MICROPY_HW_FLASH_16M 0)
+
+if(NOT DEFINED MICROPY_HW_FLASH_STORAGE_BYTES)
+    # 4MB - 1MB reserved for firmware = 3MB file system
+    # 4MB 减去 1MB 固件预留 = 3MB 文件系统
+    set(MICROPY_HW_FLASH_STORAGE_BYTES 3145728)
+endif()

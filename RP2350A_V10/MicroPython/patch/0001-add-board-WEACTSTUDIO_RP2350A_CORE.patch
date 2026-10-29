@@ -1,0 +1,184 @@
+diff -ruN a/ports/rp2/boards/WEACTSTUDIO_RP2350A_CORE/board.json b/ports/rp2/boards/WEACTSTUDIO_RP2350A_CORE/board.json
+--- a/ports/rp2/boards/WEACTSTUDIO_RP2350A_CORE/board.json	1970-01-01 08:00:00.000000000 +0800
++++ b/ports/rp2/boards/WEACTSTUDIO_RP2350A_CORE/board.json	2026-10-29 15:26:19.059887126 +0800
+@@ -0,0 +1,21 @@
++{
++    "deploy": [
++        "../deploy.md"
++    ],
++    "docs": "",
++    "features": [
++        "Dual-core",
++        "External Flash",
++        "USB-C"
++    ],
++    "images": [],
++    "mcu": "rp2350",
++    "product": "RP2350A Core V10",
++    "thumbnail": "",
++    "url": "https://github.com/WeActStudio/WeActStudio.RP2350ACoreBoard",
++    "variants": {
++        "4M": "16MB -> 4MB flash",
++        "RISCV": "RISC-V core"
++    },
++    "vendor": "WeAct Studio"
++}
+diff -ruN a/ports/rp2/boards/WEACTSTUDIO_RP2350A_CORE/manifest.py b/ports/rp2/boards/WEACTSTUDIO_RP2350A_CORE/manifest.py
+--- a/ports/rp2/boards/WEACTSTUDIO_RP2350A_CORE/manifest.py	1970-01-01 08:00:00.000000000 +0800
++++ b/ports/rp2/boards/WEACTSTUDIO_RP2350A_CORE/manifest.py	2026-10-29 15:26:19.059887126 +0800
+@@ -0,0 +1,2 @@
++include("$(PORT_DIR)/boards/manifest.py")
++freeze("modules")
+diff -ruN a/ports/rp2/boards/WEACTSTUDIO_RP2350A_CORE/modules/.gitkeep b/ports/rp2/boards/WEACTSTUDIO_RP2350A_CORE/modules/.gitkeep
+--- a/ports/rp2/boards/WEACTSTUDIO_RP2350A_CORE/modules/.gitkeep	1970-01-01 08:00:00.000000000 +0800
++++ b/ports/rp2/boards/WEACTSTUDIO_RP2350A_CORE/modules/.gitkeep	2026-10-29 15:26:19.059887126 +0800
+@@ -0,0 +1,4 @@
++# 占位文件：本目录用于放自定义冻结模块（.py）。
++# MicroPython 构建要求该目录必须存在（manifest.py 里有 freeze("modules")），
++# 删掉本文件或整个目录会报 manifest error。
++# 不需要冻结模块时保持本目录为空即可。
+diff -ruN a/ports/rp2/boards/WEACTSTUDIO_RP2350A_CORE/mpconfigboard.cmake b/ports/rp2/boards/WEACTSTUDIO_RP2350A_CORE/mpconfigboard.cmake
+--- a/ports/rp2/boards/WEACTSTUDIO_RP2350A_CORE/mpconfigboard.cmake	1970-01-01 08:00:00.000000000 +0800
++++ b/ports/rp2/boards/WEACTSTUDIO_RP2350A_CORE/mpconfigboard.cmake	2026-10-29 15:26:19.059887126 +0800
+@@ -0,0 +1,26 @@
++# CMake file for WeAct Studio RP2350A Core V10 (WeAct RP2350A_V10)
++#
++# 芯片：RP2350A  QFN-60  30 个可用 GPIO（GPIO0~GPIO29）
++# 外设：16MB/4MB QSPI Flash、2xLED(GP24/GP25)、按键(GP23)、USB1.1
++#
++# 用 MICROPY_BOARD_VARIANT 区分 Flash 容量：16M（默认） / 4M
++
++# 选择 pico-sdk 中已经存在的 RP2350A V10 板级定义（16MB 版本），
++# 4MB 时在 mpconfigboard.h 里用 PICO_FLASH_SIZE_BYTES 覆盖。
++set(PICO_BOARD "weact_studio_rp2350a_core_v10_16mb")
++
++# 让 CMake 变量与变体一致（pico-sdk 会用它生成链接脚本的 flash 大小）
++if(MICROPY_BOARD_VARIANT STREQUAL "4M")
++    set(PICO_FLASH_SIZE_BYTES 4194304)
++    set(MICROPY_HW_FLASH_16MB 0)
++else()
++    set(PICO_FLASH_SIZE_BYTES 16777216)
++    set(MICROPY_HW_FLASH_16MB 1)
++endif()
++
++# 关键：CMake 普通变量不会自动变成 C 宏，必须显式 add_compile_definitions。
++# （PICO_BOARD_EXTRA_DEFINES 只对 SDK 内部 target 生效，对 MicroPython 的
++#   firmware target 无效 —— 漏了这行，4MB 固件会顶着 "16MB" 的板名出厂）
++add_compile_definitions(MICROPY_HW_FLASH_16MB=${MICROPY_HW_FLASH_16MB})
++
++set(MICROPY_FROZEN_MANIFEST ${MICROPY_BOARD_DIR}/manifest.py)
+diff -ruN a/ports/rp2/boards/WEACTSTUDIO_RP2350A_CORE/mpconfigboard.h b/ports/rp2/boards/WEACTSTUDIO_RP2350A_CORE/mpconfigboard.h
+--- a/ports/rp2/boards/WEACTSTUDIO_RP2350A_CORE/mpconfigboard.h	1970-01-01 08:00:00.000000000 +0800
++++ b/ports/rp2/boards/WEACTSTUDIO_RP2350A_CORE/mpconfigboard.h	2026-10-29 15:26:19.059887126 +0800
+@@ -0,0 +1,39 @@
++// Board and hardware specific configuration for WeAct Studio RP2350A Core V10
++//
++// 默认构建 = 16MB Flash 版本；
++// 使用 MICROPY_BOARD_VARIANT=4M 构建 4MB Flash 版本。
++
++
++// 关键：默认值在 mpconfigport.h 里是 0，不显式打开的话
++// USB 就只有 CDC 串口、没有 Mass Storage，电脑上不会出现 U 盘！
++#define MICROPY_HW_USB_MSC (1)
++#define MICROPY_HW_USB_MSC_INQUIRY_VENDOR_STRING "WeAct"
++#define MICROPY_HW_USB_MSC_INQUIRY_PRODUCT_STRING "RP2350A V10"
++#define MICROPY_HW_USB_MSC_INQUIRY_REVISION_STRING "1.0"
++
++// 板载：LED1 = GPIO24，LED2 = GPIO25，用户按键 = GPIO23（低电平有效）
++#define MICROPY_HW_LED1_PIN (24)
++#define MICROPY_HW_LED2_PIN (25)
++#define MICROPY_HW_KEY_PIN  (23)
++
++// 默认 UART 引出在 GP0(TX)/GP1(RX)，对应的复用功能是 UART0
++#define MICROPY_HW_UART0_TX (0)
++#define MICROPY_HW_UART0_RX (1)
++#define MICROPY_HW_UART0_CTS (-1)
++#define MICROPY_HW_UART0_RTS (-1)
++
++// pico-sdk 的 board 头文件已经给过默认值，这里必须 undef 后用变体值覆盖
++#undef PICO_FLASH_SIZE_BYTES
++#ifndef MICROPY_HW_FLASH_16MB
++#define MICROPY_HW_FLASH_16MB 1
++#endif
++
++#if MICROPY_HW_FLASH_16MB
++// 16MB Flash
++#define PICO_FLASH_SIZE_BYTES (16 * 1024 * 1024)
++#define MICROPY_HW_BOARD_NAME "WeAct Studio RP2350A Core V10 (16MB)"
++#else
++// 4MB Flash
++#define PICO_FLASH_SIZE_BYTES (4 * 1024 * 1024)
++#define MICROPY_HW_BOARD_NAME "WeAct Studio RP2350A Core V10 (4MB)"
++#endif
+diff -ruN a/ports/rp2/boards/WEACTSTUDIO_RP2350A_CORE/mpconfigvariant_4M.cmake b/ports/rp2/boards/WEACTSTUDIO_RP2350A_CORE/mpconfigvariant_4M.cmake
+--- a/ports/rp2/boards/WEACTSTUDIO_RP2350A_CORE/mpconfigvariant_4M.cmake	1970-01-01 08:00:00.000000000 +0800
++++ b/ports/rp2/boards/WEACTSTUDIO_RP2350A_CORE/mpconfigvariant_4M.cmake	2026-10-29 15:26:19.059887126 +0800
+@@ -0,0 +1,8 @@
++# 4MB Flash 变体：make BOARD=WEACTSTUDIO_RP2350A_CORE BOARD_VARIANT=4M
++set(PICO_PLATFORM "rp2350")
++set(MICROPY_HW_FLASH_16M 0)
++
++if(NOT DEFINED MICROPY_HW_FLASH_STORAGE_BYTES)
++    # 4MB - 1MB(固件预留) = 3MB 文件系统
++    set(MICROPY_HW_FLASH_STORAGE_BYTES 3145728)
++endif()
+diff -ruN a/ports/rp2/boards/WEACTSTUDIO_RP2350A_CORE/mpconfigvariant.cmake b/ports/rp2/boards/WEACTSTUDIO_RP2350A_CORE/mpconfigvariant.cmake
+--- a/ports/rp2/boards/WEACTSTUDIO_RP2350A_CORE/mpconfigvariant.cmake	1970-01-01 08:00:00.000000000 +0800
++++ b/ports/rp2/boards/WEACTSTUDIO_RP2350A_CORE/mpconfigvariant.cmake	2026-10-29 15:26:19.059887126 +0800
+@@ -0,0 +1,8 @@
++# 默认变体：ARM 架构 + 16MB Flash
++set(PICO_PLATFORM "rp2350")
++set(MICROPY_HW_FLASH_16M 1)
++
++if(NOT DEFINED MICROPY_HW_FLASH_STORAGE_BYTES)
++    # 16MB - 1MB(固件预留) = 15MB 文件系统
++    set(MICROPY_HW_FLASH_STORAGE_BYTES 15728640)
++endif()
+diff -ruN a/ports/rp2/boards/WEACTSTUDIO_RP2350A_CORE/mpconfigvariant_RISCV.cmake b/ports/rp2/boards/WEACTSTUDIO_RP2350A_CORE/mpconfigvariant_RISCV.cmake
+--- a/ports/rp2/boards/WEACTSTUDIO_RP2350A_CORE/mpconfigvariant_RISCV.cmake	1970-01-01 08:00:00.000000000 +0800
++++ b/ports/rp2/boards/WEACTSTUDIO_RP2350A_CORE/mpconfigvariant_RISCV.cmake	2026-10-29 15:26:19.059887126 +0800
+@@ -0,0 +1,7 @@
++# RISC-V 变体（可选）：make BOARD=WEACTSTUDIO_RP2350A_CORE BOARD_VARIANT=RISCV
++set(PICO_PLATFORM "rp2350-riscv")
++set(MICROPY_HW_FLASH_16M 1)
++
++if(NOT DEFINED MICROPY_HW_FLASH_STORAGE_BYTES)
++    set(MICROPY_HW_FLASH_STORAGE_BYTES 15728640)
++endif()
+diff -ruN a/ports/rp2/boards/WEACTSTUDIO_RP2350A_CORE/pins.csv b/ports/rp2/boards/WEACTSTUDIO_RP2350A_CORE/pins.csv
+--- a/ports/rp2/boards/WEACTSTUDIO_RP2350A_CORE/pins.csv	1970-01-01 08:00:00.000000000 +0800
++++ b/ports/rp2/boards/WEACTSTUDIO_RP2350A_CORE/pins.csv	2026-10-29 15:26:19.059887126 +0800
+@@ -0,0 +1,33 @@
++GP0,GPIO0
++GP1,GPIO1
++GP2,GPIO2
++GP3,GPIO3
++GP4,GPIO4
++GP5,GPIO5
++GP6,GPIO6
++GP7,GPIO7
++GP8,GPIO8
++GP9,GPIO9
++GP10,GPIO10
++GP11,GPIO11
++GP12,GPIO12
++GP13,GPIO13
++GP14,GPIO14
++GP15,GPIO15
++GP16,GPIO16
++GP17,GPIO17
++GP18,GPIO18
++GP19,GPIO19
++GP20,GPIO20
++GP21,GPIO21
++GP22,GPIO22
++GP25,GPIO25
++GP26,GPIO26
++GP27,GPIO27
++GP28,GPIO28
++GP29,GPIO29
++GP23,GPIO23
++GP24,GPIO24
++LED,GPIO25
++LED1,GPIO24
++LED2,GPIO25

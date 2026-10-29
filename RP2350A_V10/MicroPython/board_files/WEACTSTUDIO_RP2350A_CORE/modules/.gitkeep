@@ -1,0 +1,4 @@
+# 占位文件：本目录用于放自定义冻结模块（.py）。
+# MicroPython 构建要求该目录必须存在（manifest.py 里有 freeze("modules")），
+# 删掉本文件或整个目录会报 manifest error。
+# 不需要冻结模块时保持本目录为空即可。
