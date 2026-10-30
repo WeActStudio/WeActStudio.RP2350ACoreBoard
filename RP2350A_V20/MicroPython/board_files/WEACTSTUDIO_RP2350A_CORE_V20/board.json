@@ -1,0 +1,22 @@
+{
+    "deploy": [
+        "../deploy.md"
+    ],
+    "docs": "",
+    "features": [
+        "Dual-core",
+        "External Flash",
+        "USB-C",
+        "Pico 2 compatible (Flash size differs)"
+    ],
+    "images": [],
+    "mcu": "rp2350",
+    "product": "RP2350A Core V20",
+    "thumbnail": "",
+    "url": "https://github.com/WeActStudio/WeActStudio.RP2350ACoreBoard",
+    "variants": {
+        "4M": "4MB flash, 3MB filesystem",
+        "RISCV": "RISC-V core"
+    },
+    "vendor": "WeAct Studio"
+}

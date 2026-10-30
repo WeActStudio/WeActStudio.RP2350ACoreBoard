@@ -1,0 +1,3 @@
+# Frozen modules live here.
+# manifest.py calls freeze("modules"), so this directory must exist.
+# 冻结模块放在这里，manifest.py 会 freeze("modules")，目录不能缺。
