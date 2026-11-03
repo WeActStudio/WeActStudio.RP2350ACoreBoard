@@ -3,8 +3,8 @@
 #    taobao     : weactstudio.taobao.com
 #    aliexpress : weactstudio.aliexpress.com
 #    github     : github.com/WeActStudio
-#    gitee      : gitee.com/WeAct-TC
-#    blog      : www.weact-tc.cn
+#    gitee      : gitee.com/WeActStudio
+#    blog      : blog.weactstudio.com
 # =============================================================================
 #  03_key_poll.py -- 外部按键轮询 / External key polling
 #

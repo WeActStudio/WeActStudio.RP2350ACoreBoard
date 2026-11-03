@@ -3,8 +3,8 @@
 #    taobao     : weactstudio.taobao.com
 #    aliexpress : weactstudio.aliexpress.com
 #    github     : github.com/WeActStudio
-#    gitee      : gitee.com/WeAct-TC
-#    blog      : www.weact-tc.cn
+#    gitee      : gitee.com/WeActStudio
+#    blog      : blog.weactstudio.com
 # =============================================================================
 #  07_pwm_servo.py -- PWM 输出：舵机与蜂鸣器 / PWM output: servo and buzzer
 #

@@ -3,8 +3,8 @@
 #    taobao     : weactstudio.taobao.com
 #    aliexpress : weactstudio.aliexpress.com
 #    github     : github.com/WeActStudio
-#    gitee      : gitee.com/WeAct-TC
-#    blog      : www.weact-tc.cn
+#    gitee      : gitee.com/WeActStudio
+#    blog      : blog.weactstudio.com
 # =============================================================================
 #  09_i2c_scan.py -- I2C 总线扫描 / I2C bus scan
 #

@@ -3,8 +3,8 @@
 #    taobao     : weactstudio.taobao.com
 #    aliexpress : weactstudio.aliexpress.com
 #    github     : github.com/WeActStudio
-#    gitee      : gitee.com/WeAct-TC
-#    blog      : www.weact-tc.cn
+#    gitee      : gitee.com/WeActStudio
+#    blog      : blog.weactstudio.com
 # =============================================================================
 #  04_key_irq.py -- 按键中断 / Key interrupt
 #

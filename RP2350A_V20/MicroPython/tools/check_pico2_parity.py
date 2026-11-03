@@ -4,8 +4,8 @@
 #    taobao     : weactstudio.taobao.com
 #    aliexpress : weactstudio.aliexpress.com
 #    github     : github.com/WeActStudio
-#    gitee      : gitee.com/WeAct-TC
-#    blog      : www.weact-tc.cn
+#    gitee      : gitee.com/WeActStudio
+#    blog      : blog.weactstudio.com
 # =============================================================================
 """check_pico2_parity.py -- 校验 V20 板级头是否仍与 pico2.h 一致
                            Verify the V20 board header still matches pico2.h

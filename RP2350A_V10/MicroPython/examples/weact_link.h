@@ -3,8 +3,8 @@
 //    taobao     : weactstudio.taobao.com
 //    aliexpress : weactstudio.aliexpress.com
 //    github     : github.com/WeActStudio
-//    gitee      : gitee.com/WeAct-TC
-//    blog      : www.weact-tc.cn
+//    gitee      : gitee.com/WeActStudio
+//    blog      : blog.weactstudio.com
 // =============================================================================
 //  weact_link.h -- WeAct Studio 版权头与板级引脚宏 / copyright header and pin macros
 //
@@ -19,8 +19,8 @@
   * taobao     : weactstudio.taobao.com
   * aliexpress : weactstudio.aliexpress.com
   * github     : github.com/WeActStudio
-  * gitee      : gitee.com/WeAct-TC
-  * blog      : www.weact-tc.cn
+  * gitee      : gitee.com/WeActStudio
+  * blog      : blog.weactstudio.com
   */
 
 #ifndef WEACT_BOARD_H
